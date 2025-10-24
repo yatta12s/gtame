@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<style>
+#wrapper {
+	width:1000px;
+	height:auto;
+	margin:auto;
+}
+#imageDiv p {
+	text-align:center;
+}
+
+#imageDiv ul {
+	list-style-type:none;
+}
+
+#imageDiv ul li {
+	float:left;
+	display:inline-block;
+	height:180px;
+	border:4px solid black;
+	margin:10px;
+}
+
+#theImage {
+	width:250px;
+	height:250px;
+	display:block;
+	margin:auto;
+}
+
+#question {
+	display:none;
+}
+</style>
+<script>
+var images=["images/Baseball.jpg","images/Basketball.jpg","images/Bowling.jpg","images/PingPong.jpg",
+"images/Soccer.jpg","images/Tennis.jpg"];
+var nameOfImages=["Baseball","Basketball","Bowling","PingPong","Soccer","Tennis"];
+var counter=[0,0,0,0,0,0];
+var targetIndex;
+var timer1,timer2;
+var lastIndex=0;
+function flashImages(){
+
+	var index=Math.floor(Math.random()*1000)%images.length;
+	if (lastIndex==index) {
+		if (index<images.length-1) 
+			index++;
+		else 
+			index=0;
+	}
+	lastIndex=index;
+	counter[index]++;
+	document.getElementById("clue").innerHTML=counter;
+	document.getElementById("theImage").src="images/"+nameOfImages[index]+".jpg";
+	
+}
+
+function startGame(){
+	counter=[0,0,0,0,0,0];
+	document.getElementById("question").style.display="none";
+	document.getElementById("answer").value=0;
+	timer1=setInterval("flashImages()",400);
+	timer2=setTimeout("stopFlash()",2800);
+}
+
+function stopFlash() {
+	clearInterval(timer1);
+	clearTimeout(timer2);
+	targetIndex=Math.floor(Math.random()*1000)%images.length;
+	document.getElementById("theImage").src="images/blank.png";
+	document.getElementById("targetPic").innerHTML=nameOfImages[targetIndex];
+	document.getElementById("question").style.display="block";
+	
+}
+
+function checkAnswer(){
+	guess=document.getElementById("answer").value;
+	if (guess==counter[targetIndex]) {
+		alert("You Got It!!");
+	}
+	else {
+		alert("Oops try again!");
+	}
+}
+</script>
+</head>
+<body>
+<div id="wrapper">
+<div id="clue"></div>
+<div id="imageDiv">
+<ul>
+<li><img src="images/Baseball.jpg" title="Baseball"/><p>Baseball</p></li>
+<li><img src="images/Basketball.jpg" title="Basketball"/><p>Basketball</p></li>
+<li><img src="images/Bowling.jpg" title="Bowling" /><p>Bowling</p></li>
+<li><img src="images/PingPong.jpg" title="PingPong" /><p>PingPong</p></li>
+<li><img src="images/Soccer.jpg" title="Soccer" /><p>Soccer</p></li>
+<li><img src="images/Tennis.jpg" title="Tennis" /><p>Tennis</p></li>
+</ul>
+</div>
+<img id="theImage" src="images/blank.png" alt=""/>
+<input type="button" value="Start" onclick="startGame();"/>
+<div id="question"><p>How many times did you see the <span id="targetPic"></span>?</p>
+<p>Your answer: <input type="number" id="answer" value="0" size="1"/>
+	<input type="button" value="check" onclick="checkAnswer();"></p>
+</div>
+</div>
+</body>
+</html>
